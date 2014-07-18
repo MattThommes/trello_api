@@ -1,5 +1,4 @@
 # Trello API tests
-==
 
 Playing around with the Trello API.
 
