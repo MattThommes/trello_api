@@ -1,9 +1,9 @@
 # Trello API tests
-==========
+==
 
 Playing around with the Trello API.
 
-## `cards_recent-list.js`
+### `cards_recent-list.js`
 
 I wanted a quick way to output all cards in a particular Trello list. The Trello interface is great, but once you have a lot of cards in a particular list, it's hard to visualize them all.
 
