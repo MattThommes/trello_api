@@ -16,6 +16,8 @@ In the inspector you'll see a network request made that shows the raw list ID:
 
 ![Screenshot of Chrome inspector - network request](mattthommes.github.io/trello_api/img/trello2.png)
 
+Set that list ID as the value of the `list_id` variable (near the top of the script).
+
 Example output:
 
 	'LIST NAME' cards:
