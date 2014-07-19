@@ -10,11 +10,11 @@ This script uses Node.js to fetch all cards from a certain Trello board & list. 
 
 There are various ways to get the list ID, but I found just inspecting things in Chrome to be the quickest. Just drag the list (that you want the ID for) back onto itself (slightly drag away then right back):
 
-![Screenshot of Trello board - dragging a list](img/trello1.png)
+![Screenshot of Trello board - dragging a list](img/trello1.jpg)
 
 In the inspector you'll see a network request made that shows the raw list ID:
 
-![Screenshot of Chrome inspector - network request](img/trello2.png)
+![Screenshot of Chrome inspector - network request](img/trello2.jpg)
 
 Set that list ID as the value of the `list_id` variable (near the top of the script).
 
