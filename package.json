@@ -1,0 +1,30 @@
+{
+  "name": "MattThommes/trello_api",
+  "version": "1.0.0",
+  "description": "Playing around with the Trello API.",
+  "keywords": [
+    "Node.js",
+    "Trello",
+    "API"
+  ],
+  "author": {
+    "name": "Matt Thommes",
+    "email": "matt@thomm.es",
+    "url":  "http://blog.matt.thomm.es"
+  },
+  "homepage": "https://github.com/MattThommes/trello_api",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MattThommes/trello_api"
+  },
+  "engines": {
+    "node": ">= 0.6.0",
+    "npm": ">= 1.0.0"
+  },
+  "dependencies": {
+  	"node-trello": ">= 0.1.5"
+  },
+  "devDependencies": {},
+  "bundleDependencies": [],
+  "main": "cards_recent-list.js"
+}
