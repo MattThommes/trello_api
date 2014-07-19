@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Trello API tests : Playing around with the Trello API." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Trello API tests</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/MattThommes/trello_api">View on GitHub</a>
+
+          <h1 id="project_title">Trello API tests</h1>
+          <h2 id="project_tagline">Playing around with the Trello API.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/MattThommes/trello_api/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/MattThommes/trello_api/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="trello-api-tests" class="anchor" href="#trello-api-tests"><span class="octicon octicon-link"></span></a>Trello API tests</h1>
+
+<p>Playing around with the Trello API.</p>
+
+<h3>
+<a name="cards_recent-listjs" class="anchor" href="#cards_recent-listjs"><span class="octicon octicon-link"></span></a><code>cards_recent-list.js</code>
+</h3>
+
+<p>I wanted a quick way to output all cards in a particular Trello list. The Trello interface is great, but once you have a lot of cards in a particular list, it's hard to visualize them all.</p>
+
+<p>This script uses Node.js to fetch all cards from a certain Trello board &amp; list. So once you have the list ID, you can use that to generate all cards in that list.</p>
+
+<p>There are various ways to get the list ID, but I found just inspecting things in Chrome to be the quickest. Just drag the list (that you want the ID for) back onto itself (slightly drag away then right back):</p>
+
+<p><img src="mattthommes.github.com/trello_api/img/trello1.png" alt="Screenshot of Trello board - dragging a list"></p>
+
+<p>In the inspector you'll see a network request made that shows the raw list ID:</p>
+
+<p><img src="mattthommes.github.com/trello_api/img/trello2.png" alt="Screenshot of Chrome inspector - network request"></p>
+
+<p>Example output:</p>
+
+<pre><code>'LIST NAME' cards:
+
+1. Label Name [Card Name here](https://trello.com/c/xxxxxx)
+
+2. Another Label Name [Card 2 Name here](https://trello.com/c/xxxxxx)
+</code></pre>
+
+<p>You can then copy/paste this output into a Markdown editor to view the HTML.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Trello API tests maintained by <a href="https://github.com/MattThommes">MattThommes</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
