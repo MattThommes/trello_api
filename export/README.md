@@ -1,4 +1,4 @@
-# Exporting Trello Data
+# Exporting Trello data
 
 This script will handle parsing your exported Trello data. Instead of using the API to grab this data, we'll just download the JSON file that is provided for each board:
 

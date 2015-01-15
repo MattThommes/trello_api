@@ -12,6 +12,4 @@
 $debug->dbg($card);
 	}
 
-	//print_r($data);
-
 ?>
