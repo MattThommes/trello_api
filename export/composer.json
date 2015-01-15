@@ -1,0 +1,17 @@
+{ 
+	"name": "mattthommes/trello_api/export",
+	"description": "Exporting and parsing Trello data.",
+	"authors": [{
+			"name": "Matt Thommes",
+			"email": "matt@thomm.es",
+			"homepage": "http://blog.matt.thomm.es",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"MattThommes/Global": "1.1",
+		"aws/aws-sdk-php": "2.7.12"
+	},
+	"homepage": "http://github.com/MattThommes/trello_api/tree/master/export",
+	"minimum-stability": "dev"
+}
