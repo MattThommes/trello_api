@@ -16,6 +16,10 @@ This script uses Node.js to fetch all cards from a certain Trello board & list. 
 
 ![Screenshot of Trello app authentication](img/trello5.jpg)
 
+Fill in the values at the top of the script:
+
+![Paste your keys into the script](img/trello6.jpg)
+
 ### Usage
 
 There are various ways to get the list ID, but I found just inspecting things in Chrome to be the quickest. Just drag the list (that you want the ID for) back onto itself (slightly drag away then right back):

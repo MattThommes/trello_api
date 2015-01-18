@@ -1,5 +1,5 @@
 var Trello = require("node-trello");
-var t = new Trello("", "");
+var t = new Trello("APP-KEY", "TOKEN");
 
 var list_id = "54b99153725fa81a31e95b44";
 var list_name = "";
