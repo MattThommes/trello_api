@@ -1,11 +1,18 @@
 var Trello = require("node-trello");
 var t = new Trello("", "");
 
-var list_id = "539cabd4301c4ddw3n0050ce";
+var list_id = "54b99153725fa81a31e95b44";
 var list_name = "";
+
+// get user info.
+/*t.get("/1/members/me", function(err, data) {
+  if (err) throw err;
+  console.log(data);
+});*/
 
 // get list info.
 t.get("/1/lists/" + list_id, function(err, data) {
+	if (err) throw err;
 	list_name = data.name;
 });
 

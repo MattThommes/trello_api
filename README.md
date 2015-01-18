@@ -2,11 +2,21 @@
 
 Playing around with the Trello API.
 
-### cards_recent-list.js
+## `cards_recent-list.js`
 
 I wanted a quick way to output all cards in a particular Trello list. The Trello interface is great, but once you have a lot of cards in a particular list, it's hard to visualize them all.
 
 This script uses Node.js to fetch all cards from a certain Trello board & list. So once you have the list ID, you can use that to generate all cards in that list.
+
+### Getting your auth keys
+
+[Read the instructions here](https://github.com/adunkman/node-trello) on getting your key and token.
+
+![Screenshot of Trello app authentication](img/trello4.jpg)
+
+![Screenshot of Trello app authentication](img/trello5.jpg)
+
+### Usage
 
 There are various ways to get the list ID, but I found just inspecting things in Chrome to be the quickest. Just drag the list (that you want the ID for) back onto itself (slightly drag away then right back):
 
