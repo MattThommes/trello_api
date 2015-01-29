@@ -2,7 +2,7 @@
 
 Using the Trello API:
 
-1. Cards in a list (Node.js)
+1. Output all cards in a list (Node.js)
 2. [Export all card data from a board (PHP)](/export)
 
 ## `cards_recent-list.js`
