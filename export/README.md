@@ -1,6 +1,37 @@
 # Exporting Trello data
 
-This script will handle requesting and parsing your Trello data, and saving it to a MySQL database. Here are the database tables used:
+This script will handle requesting and parsing your Trello data, and saving it to a MySQL database.
+
+First create these two files:
+
+* `config.php`
+* `db_connect.php`
+
+`config.php` should at least have this content (with real values filled in, of course):
+
+	<?php
+
+		$trello_key = "YOUR_APP_KEY";
+		$trello_token = "YOUR_TOKEN";
+		$trello_username = "YOUR_USERNAME";
+
+	?>
+
+`db_connect.php` should have this content (with real values filled in, of course):
+
+	<?php
+
+		use MattThommes\Backend\Mysql;
+
+		$mysql_host = "";
+		$mysql_user = "";
+		$mysql_pass = "";
+		$mysql_db   = "";
+		$db_conn = new Mysql($mysql_host, $mysql_user, $mysql_pass, $mysql_db);
+
+	?>
+
+Here are the database tables used:
 
 	CREATE TABLE `trello_card` (
 		`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
