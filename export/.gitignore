@@ -1,3 +1,4 @@
 composer.lock
-export.json
+config.php
+db_connect.php
 vendor/

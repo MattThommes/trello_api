@@ -1,7 +1,45 @@
 # Exporting Trello data
 
-This script will handle parsing your exported Trello data. Instead of using the API to grab this data, we'll just download the JSON file that is provided for each board:
+This script will handle requesting and parsing your Trello data, and saving it to a MySQL database. Here are the database tables used:
 
-![Screenshot of Trello export options](../img/trello3.jpg)
+	CREATE TABLE `trello_card` (
+		`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+		`board_id` varchar(40) NOT NULL DEFAULT '',
+		`list_id` varchar(40) NOT NULL DEFAULT '',
+		`card_id` varchar(40) NOT NULL DEFAULT '',
+		`title` varchar(254) NOT NULL DEFAULT '',
+		`description` text,
+		`date_lastactivity` datetime NOT NULL,
+		`closed` tinyint(1) unsigned NOT NULL DEFAULT '0',
+		PRIMARY KEY (`id`)
+	);
 
-Save this data as `export.json` in this directory, then hit the URL to the `/export/` directory.
+	CREATE TABLE `trello_card_attachment` (
+		`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+		`card_id` int(11) NOT NULL,
+		`attachment_id` varchar(40) NOT NULL DEFAULT '',
+		`date_create` datetime NOT NULL,
+		`title` varchar(200) NOT NULL DEFAULT '',
+		`url` varchar(254) NOT NULL DEFAULT '',
+		PRIMARY KEY (`id`)
+	);
+
+	CREATE TABLE `trello_card_checklist_item` (
+		`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+		`card_id` int(11) NOT NULL,
+		`checklist_id` varchar(40) NOT NULL DEFAULT '',
+		`checklist_title` varchar(200) NOT NULL DEFAULT '',
+		`item_id` varchar(40) NOT NULL DEFAULT '',
+		`state` tinyint(1) unsigned NOT NULL DEFAULT '0',
+		`title` text NOT NULL,
+		PRIMARY KEY (`id`)
+	);
+
+	CREATE TABLE `trello_card_comment` (
+		`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+		`card_id` int(11) NOT NULL,
+		`action_id` varchar(40) NOT NULL DEFAULT '',
+		`date_create` datetime NOT NULL,
+		`comment` text NOT NULL,
+		PRIMARY KEY (`id`)
+	);

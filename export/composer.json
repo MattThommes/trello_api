@@ -10,7 +10,8 @@
 	],
 	"require": {
 		"MattThommes/Global": "1.1",
-		"aws/aws-sdk-php": "2.7.12"
+		"aws/aws-sdk-php": "2.7.12",
+		"cdaguerre/php-trello-api": "dev-master"
 	},
 	"homepage": "http://github.com/MattThommes/trello_api/tree/master/export",
 	"minimum-stability": "dev"
