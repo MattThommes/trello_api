@@ -33,6 +33,15 @@ First create these two files:
 
 Here are the database tables used:
 
+	CREATE TABLE `trello_board` (
+		`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+		`board_id` varchar(40) NOT NULL DEFAULT '',
+		`title` varchar(254) NOT NULL DEFAULT '',
+		`description` text,
+		`date_lastactivity` datetime NOT NULL,
+		PRIMARY KEY (`id`)
+	);
+
 	CREATE TABLE `trello_card` (
 		`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 		`board_id` varchar(40) NOT NULL DEFAULT '',
