@@ -61,6 +61,12 @@
 						$board_list_id = $ins->insertId();
 					}
 				}
+			} else {
+				// board exists already.
+				$query = "SELECT * FROM trello_board WHERE board_id = '$board[id]'";
+				$query = $db_conn->query($query);
+				$board_row = $query->fetch();
+				$board_id = $board_row["id"];
 			}
 
 			$params = array(
@@ -72,7 +78,7 @@
 				"page" => 22, // not working yet
 			);
 			$cards = $client->boards()->cards()->all($board["id"], $params);
-$debug->dbg($cards);
+//$debug->dbg($cards);
 			foreach ($cards as $card) {
 //$debug->dbg($card);
 				$query = "SELECT COUNT(*) AS count FROM trello_card WHERE board_id = '$board_id' AND card_id = '$card[id]'";

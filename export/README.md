@@ -42,9 +42,17 @@ Here are the database tables used:
 		PRIMARY KEY (`id`)
 	);
 
+	CREATE TABLE `trello_board_list` (
+		`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+		`board_id` int(10) NOT NULL,
+		`list_id` varchar(40) NOT NULL DEFAULT '',
+		`title` varchar(254) NOT NULL DEFAULT '',
+		PRIMARY KEY (`id`)
+	);
+
 	CREATE TABLE `trello_card` (
 		`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-		`board_id` varchar(40) NOT NULL DEFAULT '',
+		`board_id` int(10) NOT NULL,
 		`list_id` varchar(40) NOT NULL DEFAULT '',
 		`card_id` varchar(40) NOT NULL DEFAULT '',
 		`title` varchar(254) NOT NULL DEFAULT '',
