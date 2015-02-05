@@ -92,7 +92,8 @@
 					"attachments" => true,
 					"checklists" => "all",
 					"actions" => "commentCard",
-					"limit" => 100,
+					"limit" => 1,
+					"skip" => 1,
 					//"page" => 22, // not working yet
 				);
 				$cards = $client->boards()->cards()->all($board["id"], $params);
@@ -192,15 +193,16 @@
 										$card_id,
 										"'$action[id]'",
 										"'" . date("Y-m-d H:i:s", strtotime($action["date"])) . "'",
-										"'" . str_replace("'", "\'", $action["data"]["text"]) . "'",
 									);
+									$comment = strval($action["data"]["text"]);
+									$values[] = "'" . mysql_real_escape_string($comment, $db_conn->dbConn) . "'";
 									$ins = $db_conn->query("INSERT INTO trello_card_comment (" . implode(", ", $fields) . ") VALUES (" . implode(", ", $values) . ")");
 									$comment_id = $ins->insertId();
 								}
 							}
 						}
 					}
-//break; // just do one for now.
+break; // just do one for now.
 				}
 			}
 
