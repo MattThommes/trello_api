@@ -36,10 +36,12 @@
 		// all of your boards.
 		$boards = $client->members()->boards()->all($trello_username);
 //$debug->dbg($boards);
+
 		foreach ($boards as $board) {
 
-			// only process active & private boards for now.
-			if (!$board["closed"] && $board["prefs"]["permissionLevel"] == "private") {
+			// only process active & private boards for now, AND those in the pre-defined whitelist.
+			if (in_array($board["id"], $board_whitelist) && !$board["closed"] && $board["prefs"]["permissionLevel"] == "private") {
+
 				$query = "SELECT COUNT(*) AS count FROM trello_board WHERE board_id = '$board[id]'";
 				$exists = $db_conn->query($query);
 				$exists = $exists->fetch();
@@ -93,7 +95,7 @@
 					"checklists" => "all",
 					"actions" => "commentCard",
 					"limit" => 1,
-					"skip" => 1,
+					//"skip" => 1,
 					//"page" => 22, // not working yet
 				);
 				$cards = $client->boards()->cards()->all($board["id"], $params);
@@ -111,6 +113,7 @@
 							"title",
 							"description",
 							"date_lastactivity",
+							"due",
 							"closed",
 						);
 						$values = array(
@@ -120,6 +123,7 @@
 							"'" . str_replace("'", "\'", $card["name"]) . "'",
 							"'" . str_replace("'", "\'", $card["desc"]) . "'",
 							"'" . date("Y-m-d H:i:s", strtotime($card["dateLastActivity"])) . "'",
+							"'" . date("Y-m-d H:i:s", strtotime($card["due"])) . "'",
 							((int)$card["closed"]) ? 1 : 0,
 						);
 						$ins = $db_conn->query("INSERT INTO trello_card (" . implode(", ", $fields) . ") VALUES (" . implode(", ", $values) . ")");
@@ -202,8 +206,8 @@
 							}
 						}
 					}
-break; // just do one for now.
 				}
+
 			}
 
 		}
