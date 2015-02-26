@@ -42,10 +42,10 @@
 			// only process active & private boards for now, AND those in the pre-defined whitelist.
 			if (in_array($board["id"], $board_whitelist) && !$board["closed"] && $board["prefs"]["permissionLevel"] == "private") {
 
-				$query = "SELECT COUNT(*) AS count FROM trello_board WHERE board_id = '$board[id]'";
+				$query = "SELECT id FROM trello_board WHERE board_id = '$board[id]'";
 				$exists = $db_conn->query($query);
 				$exists = $exists->fetch();
-				if (!(int)$exists["count"]) {
+				if (!(int)$exists["id"]) {
 					$fields = array(
 						"board_id",
 						"title",
@@ -83,10 +83,7 @@
 					}
 				} else {
 					// board exists already.
-					$query = "SELECT * FROM trello_board WHERE board_id = '$board[id]'";
-					$query = $db_conn->query($query);
-					$board_row = $query->fetch();
-					$board_id = $board_row["id"];
+					$board_id = (int)$exists["id"];
 				}
 
 				$params = array(
