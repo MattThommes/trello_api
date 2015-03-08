@@ -28,6 +28,26 @@
 		}
 	}
 
+	/*
+	 * Check if a certain row exists in the local database.
+	 * You can either get a yes/no result (if it exists or not), or have an actual value returned also (if exists).
+	 */
+	function exists_local($table, $field, $value, $return = null) {
+		if (!$return) {
+			$return_field = "COUNT(*) AS c";
+		} else {
+			$return_field = "`$return`";
+		}
+		$query = "SELECT $return_field FROM `$table` WHERE `$field` = '$value'";
+		$exists = $GLOBALS["db_conn"]->query($query);
+		$exists = $exists->fetch();
+		if ($return) {
+			return $exists[$return];
+		} else {
+			return (int)$exists["c"];
+		}
+	}
+
 	if (isset($_GET["start"])) {
 
 		$client = new Client();
@@ -42,48 +62,52 @@
 			// only process active & private boards for now, AND those in the pre-defined whitelist.
 			if (in_array($board["id"], $board_whitelist) && !$board["closed"] && $board["prefs"]["permissionLevel"] == "private") {
 
-				$query = "SELECT id FROM trello_board WHERE board_id = '$board[id]'";
-				$exists = $db_conn->query($query);
-				$exists = $exists->fetch();
-				if (!(int)$exists["id"]) {
-					$fields = array(
-						"board_id",
-						"title",
-						"description",
-						"date_lastactivity",
-					);
-					$values = array(
-						"'$board[id]'",
-						"'" . str_replace("'", "\'", $board["name"]) . "'",
-						"'" . str_replace("'", "\'", $board["desc"]) . "'",
-						"'" . date("Y-m-d H:i:s", strtotime($board["dateLastActivity"])) . "'",
-					);
+				$board_id = (int)exists_local("trello_board", "board_id", $board["id"], "id");
+				$fields = array(
+					"board_id",
+					"title",
+					"description",
+					"date_lastactivity",
+				);
+				$values = array(
+					"'$board[id]'",
+					"'" . str_replace("'", "\'", $board["name"]) . "'",
+					"'" . str_replace("'", "\'", $board["desc"]) . "'",
+					"'" . date("Y-m-d H:i:s", strtotime($board["dateLastActivity"])) . "'",
+				);
+				if (!$board_id) {
+					// Board doesn't exist locally yet - enter it.
 					$ins = $db_conn->query("INSERT INTO trello_board (" . implode(", ", $fields) . ") VALUES (" . implode(", ", $values) . ")");
 					$board_id = $ins->insertId();
-					// get this board's lists.
-					$lists = $client->boards()->lists()->all($board["id"]);
-					foreach ($lists as $list) {
-						$query = "SELECT COUNT(*) AS count FROM trello_board_list WHERE board_id = '$board_id' AND list_id = '$list[id]'";
-						$exists = $db_conn->query($query);
-						$exists = $exists->fetch();
-						if (!(int)$exists["count"]) {
-							$fields = array(
-								"board_id",
-								"list_id",
-								"title",
-							);
-							$values = array(
-								"'$board_id'",
-								"'$list[id]'",
-								"'" . str_replace("'", "\'", $list["name"]) . "'",
-							);
-							$ins = $db_conn->query("INSERT INTO trello_board_list (" . implode(", ", $fields) . ") VALUES (" . implode(", ", $values) . ")");
-							$board_list_id = $ins->insertId();
-						}
-					}
 				} else {
-					// board exists already.
-					$board_id = (int)$exists["id"];
+					// Board exists locally - do a SQL update.
+					$update_set = array();
+					while ($i = 0; $i < count($fields); $i++)
+						$update_set[] = "$fields[$i] = $values[$i]";
+					}
+					$up = $db_conn->query("UPDATE trello_board SET " . implode(", ", $update_set) . " WHERE id = '$board_id'");
+				}
+
+				// get this board's lists.
+				$lists = $client->boards()->lists()->all($board["id"]);
+				foreach ($lists as $list) {
+					$query = "SELECT COUNT(*) AS count FROM trello_board_list WHERE board_id = '$board_id' AND list_id = '$list[id]'";
+					$exists = $db_conn->query($query);
+					$exists = $exists->fetch();
+					if (!(int)$exists["count"]) {
+						$fields = array(
+							"board_id",
+							"list_id",
+							"title",
+						);
+						$values = array(
+							"'$board_id'",
+							"'$list[id]'",
+							"'" . str_replace("'", "\'", $list["name"]) . "'",
+						);
+						$ins = $db_conn->query("INSERT INTO trello_board_list (" . implode(", ", $fields) . ") VALUES (" . implode(", ", $values) . ")");
+						$board_list_id = $ins->insertId();
+					}
 				}
 
 				$params = array(
