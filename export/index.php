@@ -32,20 +32,28 @@
 	 * Check if a certain row exists in the local database.
 	 * You can either get a yes/no result (if it exists or not), or have an actual value returned also (if exists).
 	 */
-	function exists_local($table, $field, $value, $return = null) {
-		if (!$return) {
-			$return_field = "COUNT(*) AS c";
+	function exists_local($table, $where, $select = null) {
+		if (!$select) {
+			$select_fields = "COUNT(*) AS c";
 		} else {
-			$return_field = "`$return`";
+			$select_fields = "`$return`";
 		}
-		$query = "SELECT $return_field FROM `$table` WHERE `$field` = '$value'";
+		$query = "SELECT $select_fields FROM `$table` WHERE $where";
 		$exists = $GLOBALS["db_conn"]->query($query);
 		$exists = $exists->fetch();
-		if ($return) {
-			return $exists[$return];
+		if ($select) {
+			return $exists[$select];
 		} else {
 			return (int)$exists["c"];
 		}
+	}
+
+	function sql_update_set($fields) {
+		$update_set = array();
+		while ($i = 0; $i < count($fields); $i++)
+			$update_set[] = "$fields[$i] = $values[$i]";
+		}
+		return $update_set;
 	}
 
 	if (isset($_GET["start"])) {
@@ -59,10 +67,10 @@
 
 		foreach ($boards as $board) {
 
-			// only process active & private boards for now, AND those in the pre-defined whitelist.
+			// Only process active & private boards for now, AND those in the pre-defined whitelist.
 			if (in_array($board["id"], $board_whitelist) && !$board["closed"] && $board["prefs"]["permissionLevel"] == "private") {
 
-				$board_id = (int)exists_local("trello_board", "board_id", $board["id"], "id");
+				$board_id = (int)exists_local("trello_board", "`board_id` = '$board[id]'", "id");
 				$fields = array(
 					"board_id",
 					"title",
@@ -81,32 +89,32 @@
 					$board_id = $ins->insertId();
 				} else {
 					// Board exists locally - do a SQL update.
-					$update_set = array();
-					while ($i = 0; $i < count($fields); $i++)
-						$update_set[] = "$fields[$i] = $values[$i]";
-					}
+					$update_set = sql_update_set($fields);
 					$up = $db_conn->query("UPDATE trello_board SET " . implode(", ", $update_set) . " WHERE id = '$board_id'");
 				}
 
-				// get this board's lists.
+				// Get this board's lists.
 				$lists = $client->boards()->lists()->all($board["id"]);
 				foreach ($lists as $list) {
-					$query = "SELECT COUNT(*) AS count FROM trello_board_list WHERE board_id = '$board_id' AND list_id = '$list[id]'";
-					$exists = $db_conn->query($query);
-					$exists = $exists->fetch();
-					if (!(int)$exists["count"]) {
-						$fields = array(
-							"board_id",
-							"list_id",
-							"title",
-						);
-						$values = array(
-							"'$board_id'",
-							"'$list[id]'",
-							"'" . str_replace("'", "\'", $list["name"]) . "'",
-						);
+					$board_list_id = (int)exists_local("trello_board_list", "`board_id` = '$board_id' AND `list_id` = '$list[id]'", "id");
+					$fields = array(
+						"board_id",
+						"list_id",
+						"title",
+					);
+					$values = array(
+						"'$board_id'",
+						"'$list[id]'",
+						"'" . str_replace("'", "\'", $list["name"]) . "'",
+					);
+					if (!$board_list_id) {
+						// List doesn't exist locally yet - enter it.
 						$ins = $db_conn->query("INSERT INTO trello_board_list (" . implode(", ", $fields) . ") VALUES (" . implode(", ", $values) . ")");
 						$board_list_id = $ins->insertId();
+					} else {
+						// List exists locally - do a SQL update.
+						$update_set = sql_update_set($fields);
+						$up = $db_conn->query("UPDATE trello_board_list SET " . implode(", ", $update_set) . " WHERE id = '$board_list_id'");
 					}
 				}
 
